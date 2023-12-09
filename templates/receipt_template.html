@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+        <style>
+            body {
+                margin: 20px;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                margin: 0;
+            }
+
+            .layout-body {
+                flex: 1;
+                padding-bottom: 60px;
+            }
+
+            .header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            .header p {
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+
+            .receipt-title {
+                font-size: 20px;
+                font-weight: bold;
+                text-decoration: underline;
+                margin-bottom: 15px;
+            }
+
+            .footer {
+                bottom: 0;
+                width: 100%;
+                background-color: #343a40;
+                color: white;
+                text-align: center;
+                padding: 10px;
+                margin-top: auto;
+            }
+        </style>
+
+        <title>Receipt</title>
+    </head>
+
+    <body class="layout-body">
+
+        <!-- Professional Header -->
+        <div class="header">
+            <h1>Sayeed's Auto Shop</h1>
+            <p>#2 Pierre Felix Road, Diego Martin</p>
+            <p>Email: sayeed_moruf@hotmail.com | Phone: 723-4597/688-8980</p>
+        </div>
+
+        <div class="receipt-title">
+            <h2>Receipt</h2>
+        </div>
+
+
+        <div class="customer-info">
+            <p><strong>Customer Name:</strong> {{ customer_name }}</p>
+            <p><strong>Email:</strong> {{ customer_email }}</p>
+            <p><strong>Address:</strong> {{ customer_address }}</p>
+            <p><strong>Phone:</strong> {{ customer_phone }}</p>
+            <p><strong>Vehicle:</strong> {{ customer_vehicle }}</p>
+            <p><strong>License Plate:</strong> {{ vehicle_license_plate }}</p>
+            <p><strong>Mileage(km):</strong> {{ vehicle_mileage | formatNumberWithCommasNoDecimal }}</p>
+            <p><strong>Date:</strong> {{ receipt_date }}</p>
+        </div>
+
+        <!-- Display items in a table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Section</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Display parts -->
+                {% for item, cost in parts_items %}
+                    <tr>
+                        <td>Parts</td>
+                        <td>{{ item }}</td>
+                        <td>${{ cost |formatNumberWithCommas }}</td>
+                    </tr>
+                {% endfor %}
+
+                <!-- Display labour -->
+                {% for item, cost in labour_items %}
+                    <tr>
+                        <td>Labour</td>
+                        <td>{{ item }}</td>
+                        <td>${{ cost |formatNumberWithCommas  }}</td>
+                    </tr>
+                {% endfor %}
+
+                <!-- Display other -->
+                {% for item, cost in other_items %}
+                    <tr>
+                        <td>Other</td>
+                        <td>{{ item }}</td>
+                        <td>${{ cost |formatNumberWithCommas   }}</td>
+                    </tr>
+                {% endfor %}
+
+                <!-- Display discount row -->
+                {% if discount %}
+                    <tr>
+                        <td></td>
+                        <td><strong>Discount:</strong></td>
+                        <td>
+                            <strong>-${{ discount_value | usd }}</strong>
+                            ({{ discount }}%)
+                        </td>
+                    </tr>
+                {% endif %}
+
+                <tr>
+                    <td></td>
+                    <td><strong>Total Cost:</strong></td>
+                    <td><strong>${{ (total_cost * (1 - (discount / 100))) | usd }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </body>
+
+    <footer class="footer bg-dark text-white text-center py-3">
+        <p>&copy; 2023 Sayeed's Auto Shop</p>
+    </footer>
+
+</html>

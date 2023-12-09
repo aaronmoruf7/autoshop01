@@ -1,0 +1,123 @@
+<!-- home.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Financial Summary</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title bold-text large-text">Total Income</h5>
+                    <p class="card-text green-text bold-text large-text">${{ total_income | usd }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title bold-text large-text">Total Expenses</h5>
+                    <p class="card-text red-text bold-text large-text">${{ total_expenses | usd }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title net-profit-text bold-text large-text">Net Profit</h5>
+                    <p class="card-text net-profit-text bold-text large-text {% if net_profit < 0 %}red-text{% else %}green-text{% endif %}">
+                        ${{ net_profit | usd }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title net-profit-text">Net Profit/Loss</h5>
+                    <canvas id="netProfitChart" width="400" height="200"></canvas>
+                </div>
+
+            </div>
+        <!--  Picture of a car -->
+            <img src="/static/car_image.png" alt="Car Image" class="img-fluid mt-4 car-image">
+        </div>
+
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Transactions</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="color: black;">Type</th>
+                                <th style="color: black;">Description</th>
+                                <th style="color: black;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in recent_transactions %}
+                                <tr>
+                                    <td>{{ transaction.type }}</td>
+                                    <td>{{ transaction.description }}</td>
+                                    <td>${{ transaction.amount | usd }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        var ctx = document.getElementById('netProfitChart').getContext('2d');
+        var netProfitChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ chart_labels | tojson | safe }}, // Pass the labels from Flask to JavaScript
+                datasets: [{
+                    label: 'Net Profit/Loss',
+                    data: {{ chart_values | tojson | safe }}, // Pass the values from Flask to JavaScript
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: {{ chart_labels | tojson | safe }}, // Repeat labels for x-axis
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        enabled: true,
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

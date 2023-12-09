@@ -1,0 +1,102 @@
+/* styles.css */
+
+/* Set color scheme */
+:root {
+    --primary-color: #3498db;
+    --dark-color: #000;
+    --light-color: #fff;
+    --green-color: #00cc00;
+    --red-color: #ff0000;
+    --blue-color: #AED6F1;
+}
+
+body {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    font-family: 'Montserrat';
+}
+
+.navbar {
+    background-color: var(--dark-color);
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+    color: var(--light-color) !important;
+}
+
+/* Add a subtle shadow to the table for a modern look */
+.table {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Set font color to black for the home page cards */
+.card-title,
+.card-text {
+    color: var(--dark-color) !important;
+}
+
+/* Set font color to green for total income */
+.card-title:contains('Total Income'),
+.card-text.green-text {
+    color: var(--green-color) !important;
+}
+
+/* Set font color to red for total expenses */
+.card-title:contains('Total Expenses'),
+.card-text.red-text {
+    color: var(--red-color) !important;
+}
+
+
+/* Customize font color for customer database, expense, and income entries */
+#customer-table td,
+#income-table td,
+#expense-table td {
+    color: var(--dark-color) !important;
+}
+
+#customer-table th,
+#income-table th,
+#expense-table th {
+    color: var(--dark-color) !important;
+}
+
+.green-text {
+    color: var(--green-color) !important;
+}
+
+.red-text {
+    color: red !important;
+}
+
+.bold-text {
+    font-weight: 900;
+}
+
+.large-text {
+    font-size: 20px;
+}
+
+.custom-margin {
+    margin-left: 7rem !important;
+    /* Adjust the value as needed */
+}
+
+/* Style active page link */
+.nav-item.active a {
+    color: var(--blue-color) !important;
+}
+
+/* Push the login and register links all the way to the right */
+.push-to-right {
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+    /* Align to the end of the flex container */
+}
+
+.car-image {
+    border: 3px solid #000;
+    padding: 0px;
+}

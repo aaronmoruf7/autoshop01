@@ -1,0 +1,86 @@
+<!-- income.html -->
+
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="row justify-content-left">
+        <h1 class="mb-5 ml-5 custom-margin ">Income Transactions</h1>
+    </div>
+
+<!-- Search bar -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6 text-center">
+            <form class="form-inline">
+                <input class="form-control w-75 mr-2 ml-5" type="search" placeholder="Search" aria-label="Search" id="search-input">
+            </form>
+        </div>
+    </div>
+
+
+    <div class="col-md-10 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped" id="income-table">
+                    <thead>
+                        <tr class="bold-text large-text">
+                            <th scope="col">Date</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction['date'] }}</td>
+                                <td>{{ transaction['description'] }}</td>
+                                <td>${{ transaction['amount'] | usd }}</td>
+                                <td>
+                            <!-- Use a form for each delete button -->
+                                    <form method="post" action="/delete_income">
+                                        <input type="hidden" name="transaction_id" value="{{ transaction['id'] }}">
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this transaction?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<!-- Add Income Button -->
+    <div class="text-center mt-4">
+        <a href="/add_income" class="btn btn-primary">Add Income</a>
+    </div>
+
+<!-- Live search results -->
+    <script>
+    // Function to handle live search
+        function liveSearch() {
+        // Get the search input value
+            var searchQuery = $('#search-input').val().toLowerCase();
+
+        // If the search bar is empty, display all customers
+            if (!searchQuery) {
+                $('#income-table tbody tr').show();
+                return;
+            }
+
+        // Filter customers based on the search query
+            $('#income-table tbody tr').hide();
+            $('#income-table tbody tr').filter(function() {
+                return $(this).text().toLowerCase().includes(searchQuery);
+            }).show();
+        }
+
+    // Bind the liveSearch function to the input change event
+        $(document).ready(function() {
+            $('#search-input').on('input', liveSearch);
+        });
+    </script>
+
+    <script src="https://code.wjquery.com/jquery-3.6.0.min.js"></script>
+
+{% endblock %}
